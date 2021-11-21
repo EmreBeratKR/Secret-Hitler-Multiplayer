@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class MoveTemp : MonoBehaviour
+public class MoveCard : MonoBehaviour
 {
     [SerializeField] private PhotonView view;
     public float speed;
