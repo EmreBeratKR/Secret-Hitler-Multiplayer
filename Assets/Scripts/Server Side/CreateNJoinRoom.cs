@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
 
 
 public class CreateNJoinRoom : MonoBehaviourPunCallbacks
@@ -10,34 +11,81 @@ public class CreateNJoinRoom : MonoBehaviourPunCallbacks
     public InputField createInput;
     public InputField joinInput;
     public InputField nameInput;
+    public Dropdown pCountDropDown;
+    [SerializeField] Text warningText;
     [SerializeField, Range(10, 20)] private int maxLength;
-    [SerializeField] private List<string> illegalChars;
     [SerializeField] private string[] defaultNicknames;
+
+
+    private void Start()
+    {
+        setInputField();
+    }
+
+    private void setInputField()
+    {
+        createInput.characterLimit = maxLength;
+        createInput.characterValidation = InputField.CharacterValidation.Alphanumeric;
+
+        joinInput.characterLimit = maxLength;
+        joinInput.characterValidation = InputField.CharacterValidation.Alphanumeric;
+
+        nameInput.characterLimit = maxLength;
+        nameInput.characterValidation = InputField.CharacterValidation.Alphanumeric;
+    }
 
 
     public void CreateRoom()
     {
-        string c = ignoreSpace(createInput.text);
-        if (c != "")
+        string c = createInput.text;
+        string n = nameInput.text;
+        byte m = System.Convert.ToByte(pCountDropDown.options[pCountDropDown.value].text.Substring(0, 1));
+        if (n == "")
         {
-            PhotonNetwork.CreateRoom(c);
+            warningText.text = "Please enter your Nickname!";
+        }
+        else if (c == "")
+        {
+            warningText.text = "Please enter a Room Name to Create!";
+        }
+        else
+        {
+            PhotonNetwork.CreateRoom(c, Room_Option(m));
         }
     }
 
     public void JoinRoom()
     {
-        PhotonNetwork.JoinRoom(joinInput.text);
+        if (nameInput.text == "")
+        {
+            warningText.text = "Please enter your Nickname!";
+        }
+        else if (joinInput.text == "")
+        {
+            warningText.text = "Please enter a Room Name to Join!";
+        }
+        else
+        {
+            PhotonNetwork.JoinRoom(joinInput.text);
+        }
     }
 
     public override void OnJoinedRoom()
     {
         SetNickname();
-        PhotonNetwork.LoadLevel("Game");
+        PhotonNetwork.LoadLevel(2); // Room Scene
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        warningText.text = $"Failed to Join ({joinInput.text})";
+        Debug.Log(message);
+        Debug.Log(returnCode);
     }
 
     private void SetNickname()
     {
-        string n = ignoreSpace(nameInput.text);
+        string n = nameInput.text;
         if (n.Length == 0)
         {
             n = defaultNicknames[Random.Range(0, defaultNicknames.Length)];
@@ -49,16 +97,10 @@ public class CreateNJoinRoom : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = n;
     }
 
-    private string ignoreSpace(string str)
+    private RoomOptions Room_Option(byte max)
     {
-        string output = "";
-        for (int l = 0; l < str.Length; l++)
-        {
-            if (!illegalChars.Contains(str[l].ToString()))
-            {
-                output += str[l];
-            }
-        }
-        return output;
+        RoomOptions opt = new RoomOptions();
+        opt.MaxPlayers = max;
+        return opt;
     }
 }
