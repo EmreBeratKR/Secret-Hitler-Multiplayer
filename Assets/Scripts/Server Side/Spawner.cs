@@ -9,6 +9,6 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        PhotonNetwork.Instantiate(prefab.name, Vector3.zero, Quaternion.identity);
+        //PhotonNetwork.Instantiate(prefab.name, Vector3.zero, Quaternion.identity);
     }
 }

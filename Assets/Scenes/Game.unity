@@ -215,6 +215,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 659903463}
+  - {fileID: 1445761704}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -852,6 +853,67 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1445761703
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1445761704}
+  - component: {fileID: 1445761705}
+  m_Layer: 5
+  m_Name: Deck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1445761704
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445761703}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 150883446}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1445761705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445761703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f4a2cb4902c4e6c9ac33e215f5ffcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 8064281552844790628, guid: 96dff529c0baa459f98396339106da4a, type: 3}
+  shapeSprites:
+  - {fileID: -2319365763607075621, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  - {fileID: 5039535195592937782, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  - {fileID: 4972633962348217717, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  - {fileID: 1715464347950827841, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  jokerSprites:
+  - {fileID: -56982907050654816, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  - {fileID: -394453124917216630, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  - {fileID: 3478779425397702460, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  - {fileID: -2476730055248761067, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  - {fileID: -673784629107439482, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
+  - {fileID: -9051741044795783814, guid: 261c02eb400d7419a89155fc65ce77cc, type: 3}
 --- !u!1 &1561040628
 GameObject:
   m_ObjectHideFlags: 0
