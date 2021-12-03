@@ -5,6 +5,7 @@ using Photon.Pun;
 
 public class CardCreator : MonoBehaviour
 {
+    [SerializeField] private GameController gameController;
     private string[] shapes = {"H", "D", "C", "S"};
     private string[] types = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q"};
     private List<string> deck =  new List<string>();
@@ -18,7 +19,6 @@ public class CardCreator : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             createDeck();
-            //shuffleDeck();
             putDeck();   
         }
     }
@@ -35,24 +35,21 @@ public class CardCreator : MonoBehaviour
         deck.Add("HK");
     }
 
-    void shuffleDeck()
-    {
-        for (int i = 0; i < deck.Count; i++)
-        {
-            string temp = deck[i];
-            int randomIndex = Random.Range(0, deck.Count);
-            deck[i] = deck[randomIndex];
-            deck[randomIndex] = temp;
-        }
-    }
-
     private void putDeck()
     {
         for (int i = 0; i < deck.Count; i++)
         {
-            //GameObject newCard = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, transform);
-            //GameObject newCard = PhotonNetwork.Instantiate(cardPrefab.name, Vector3.zero, Quaternion.identity, (byte)(i+1));
             PhotonNetwork.Instantiate(cardPrefab.name, Vector3.zero, Quaternion.identity);
+        }
+    }
+
+    public void dealCards()
+    {
+        int temp = transform.childCount;
+        for (int i = 0; i < temp; i++)
+        {
+            int randomInt = Random.Range(0, transform.childCount);
+            transform.GetChild(randomInt).GetComponent<Card>().ParentTo(gameController.playerSlots.GetChild(i % gameController.playerList.Count).name);
         }
     }
 }

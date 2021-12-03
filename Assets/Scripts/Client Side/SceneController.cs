@@ -13,6 +13,9 @@ public class SceneController : MonoBehaviour
 
     public void EnterGame()
     {
-        PhotonNetwork.LoadLevel(3); // Game Scene
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel(3); // Game Scene
+        }
     }
 }

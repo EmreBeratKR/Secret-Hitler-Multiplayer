@@ -5,21 +5,20 @@ using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
 
-public class Card : MonoBehaviour
+public class Card : MonoBehaviourPun
 {
     [SerializeField] private Sprite[] shapeSprites;
     [SerializeField] private Sprite[] jokerSprites;
     private CardCreator cardCreator;
-    private PhotonView view;
+    private GameController gameController;
     public string shape;
     public string type;
     public bool isOpen = false;
 
     private void Awake()
     {
-        cardCreator = FindObjectOfType<CardCreator>(); 
-        view = GetComponent<PhotonView>();
-        view.OwnershipTransfer = OwnershipOption.Takeover;
+        cardCreator = FindObjectOfType<CardCreator>();
+        gameController = FindObjectOfType<GameController>();
         SetCard();
     }
 
@@ -43,8 +42,25 @@ public class Card : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.O))
         {
-            view.TransferOwnership(PhotonNetwork.PlayerListOthers[0]);
+            photonView.TransferOwnership(PhotonNetwork.PlayerListOthers[0]);
         }
+    }
+    
+    private void flipCard(bool isOpen)
+    {
+        transform.Find("Back Face").gameObject.SetActive(!isOpen);
+    }
+
+    public void ParentTo(string name)
+    {
+        photonView.RPC("ParentSetRPC", RpcTarget.All, name);
+    }
+
+    [PunRPC]
+    private void ParentSetRPC(string name)
+    {
+        transform.SetParent(gameController.playerSlots.Find(name));
+        transform.localPosition = Vector3.zero;
     }
 
     private void SetCard()
