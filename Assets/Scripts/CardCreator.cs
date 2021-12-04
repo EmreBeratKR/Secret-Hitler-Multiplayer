@@ -7,7 +7,7 @@ public class CardCreator : MonoBehaviour
 {
     [SerializeField] private GameController gameController;
     private string[] shapes = {"H", "D", "C", "S"};
-    private string[] types = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q"};
+    public string[] types = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q"};
     private List<string> deck =  new List<string>();
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private Sprite[] shapeSprites;

@@ -21,32 +21,8 @@ public class Card : MonoBehaviourPun
         gameController = FindObjectOfType<GameController>();
         SetCard();
     }
-
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.position += Vector3.right;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.position += Vector3.left;
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.position += Vector3.up;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.position += Vector3.down;
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            photonView.TransferOwnership(PhotonNetwork.PlayerListOthers[0]);
-        }
-    }
     
-    private void flipCard(bool isOpen)
+    public void flipCard(bool isOpen)
     {
         transform.Find("Back Face").gameObject.SetActive(!isOpen);
     }
@@ -59,7 +35,7 @@ public class Card : MonoBehaviourPun
     [PunRPC]
     private void ParentSetRPC(string name)
     {
-        transform.SetParent(gameController.playerSlots.Find(name));
+        transform.SetParent(gameController.playerSlots.Find(name).Find("Cards"));
         transform.localPosition = Vector3.zero;
     }
 
@@ -69,19 +45,19 @@ public class Card : MonoBehaviourPun
         string card = "";
         if (id <= 12)
         {
-            card += "H" + id.ToString();
+            card += "H" + cardCreator.types[id-1];
         }
         else if (id <= 24)
         {
-            card += "D" + (id-12).ToString();
+            card += "D" + cardCreator.types[id-13];
         }
         else if (id <= 36)
         {
-            card += "C" + (id-24).ToString();
+            card += "C" + cardCreator.types[id-25];
         }
         else if (id <= 48)
         {
-            card += "S" + (id-36).ToString();
+            card += "S" + cardCreator.types[id-37];
         }
         else
         {
