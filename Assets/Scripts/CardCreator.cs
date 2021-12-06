@@ -6,6 +6,7 @@ using Photon.Pun;
 public class CardCreator : MonoBehaviour
 {
     [SerializeField] private GameController gameController;
+    [SerializeField] private GameObject dealButton;
     private string[] shapes = {"H", "D", "C", "S"};
     public string[] types = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q"};
     private List<string> deck =  new List<string>();
@@ -19,7 +20,12 @@ public class CardCreator : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             createDeck();
-            putDeck();   
+            putDeck();
+            dealButton.SetActive(true);
+        }
+        else
+        {
+            Destroy(dealButton);
         }
     }
 
@@ -45,11 +51,15 @@ public class CardCreator : MonoBehaviour
 
     public void dealCards()
     {
+
         int temp = transform.childCount;
         for (int i = 0; i < temp; i++)
         {
             int randomInt = Random.Range(0, transform.childCount);
+            //transform.GetChild(randomInt).GetComponent<PhotonView>().TransferOwnership(gameController.playerList[i % gameController.playerList.Count]);
             transform.GetChild(randomInt).GetComponent<Card>().ParentTo(gameController.playerSlots.GetChild(i % gameController.playerList.Count).name);
         }
+        gameController.updatePlayerHand();
+        Destroy(dealButton);
     }
 }

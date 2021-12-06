@@ -41,6 +41,10 @@ MonoBehaviour:
   - RespawnSpaceship
   - ParentSet
   - ParentSetRPC
+  - stackToMiddle
+  - SomeRpc
+  - revealCard
+  - updatePlayerHandRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
