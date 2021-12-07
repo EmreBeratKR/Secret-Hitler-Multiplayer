@@ -22,6 +22,14 @@ public class GameController : MonoBehaviourPun
         }
         PutPlayers();
     }
+    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O) && PhotonNetwork.IsMasterClient)
+        {
+            passTurn();
+        }
+    }
 
     private void PutPlayers()
     {
@@ -30,6 +38,17 @@ public class GameController : MonoBehaviourPun
             playerSlots.GetChild(i).GetComponent<PhotonView>().TransferOwnership(playerList[i]);
             playerSlots.GetChild(i).Find("Nickname").GetComponent<Text>().text = playerList[i].NickName;
         }
+    }
+
+    public void passTurn()
+    {
+        photonView.RPC("passTurnRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void passTurnRPC()
+    {
+        turn = (turn + 1) % playerList.Count;
     }
 
     public void updatePlayerHand()
@@ -51,10 +70,11 @@ public class GameController : MonoBehaviourPun
                 hand.GetChild(c).LeanMoveLocal(Vector3.right * gap * (offset + c), 0.25f).setEaseOutQuint();
             }
         }
-        revealCard();
+        revealCards();
+        countCards();
     }
 
-    private void revealCard()
+    private void revealCards()
     {
         for (int s = 0; s < playerSlots.childCount; s++)
         {
@@ -73,6 +93,17 @@ public class GameController : MonoBehaviourPun
                     slot.Find("Cards").GetChild(c).GetComponent<Card>().flipCard(false);
                 }
             }
+        }
+    }
+
+    private void countCards()
+    {
+        PhotonView player;
+        for (int p = 0; p < playerSlots.childCount; p++)
+        {
+            player = playerSlots.GetChild(p).GetComponent<PhotonView>();
+            int count = player.transform.Find("Cards").childCount;
+            player.transform.Find("Nickname").GetComponent<Text>().text = player.Owner.NickName + " (" + count + ")";
         }
     }
 
