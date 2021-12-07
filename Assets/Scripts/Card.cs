@@ -27,7 +27,7 @@ public class Card : MonoBehaviourPun
 
     public void Click()
     {
-        if (transform.parent.tag != gameController.middleStack.tag)
+        if (transform.parent.tag != gameController.middleStack.tag && gameController.isMyTurn())
         {
             if (photonView.IsMine)
             {
@@ -45,8 +45,11 @@ public class Card : MonoBehaviourPun
             }
             else
             {
-                ParentTo(GetSlot(PhotonNetwork.LocalPlayer).name);
-                gameController.updatePlayerHand();
+                if (transform.parent.parent.GetComponent<PhotonView>().Owner == gameController.previousPlayer())
+                {    
+                    ParentTo(GetSlot(PhotonNetwork.LocalPlayer).name);
+                    gameController.updatePlayerHand();
+                }
             }
         }
     }

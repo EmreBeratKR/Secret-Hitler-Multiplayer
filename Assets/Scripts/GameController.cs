@@ -7,8 +7,9 @@ using Photon.Pun;
 using Photon.Realtime;
 
 public class GameController : MonoBehaviourPun
-{  
+{ 
     [SerializeField] private float gap;
+    public GameObject passButton;
     public RectTransform playerSlots;
     public RectTransform middleStack;
     public List<Player> playerList;
@@ -21,14 +22,6 @@ public class GameController : MonoBehaviourPun
             playerList.Add(player);
         }
         PutPlayers();
-    }
-    
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.O) && PhotonNetwork.IsMasterClient)
-        {
-            passTurn();
-        }
     }
 
     private void PutPlayers()
@@ -49,6 +42,7 @@ public class GameController : MonoBehaviourPun
     private void passTurnRPC()
     {
         turn = (turn + 1) % playerList.Count;
+        passButton.SetActive(PhotonNetwork.LocalPlayer == playerList[turn]);
     }
 
     public void updatePlayerHand()
@@ -105,6 +99,16 @@ public class GameController : MonoBehaviourPun
             int count = player.transform.Find("Cards").childCount;
             player.transform.Find("Nickname").GetComponent<Text>().text = player.Owner.NickName + " (" + count + ")";
         }
+    }
+
+    public Player previousPlayer()
+    {
+        return playerList[(2 * turn - 1) % playerList.Count];
+    }
+
+    public bool isMyTurn()
+    {
+        return PhotonNetwork.LocalPlayer == playerList[turn];
     }
 
     public string TransformToString(Transform transform)

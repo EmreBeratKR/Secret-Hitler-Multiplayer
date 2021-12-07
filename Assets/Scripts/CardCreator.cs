@@ -60,5 +60,6 @@ public class CardCreator : MonoBehaviour
         }
         gameController.updatePlayerHand();
         Destroy(dealButton);
+        gameController.passButton.SetActive(true);
     }
 }
