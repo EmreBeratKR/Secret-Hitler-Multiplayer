@@ -45,8 +45,11 @@ public class Card : MonoBehaviourPun
             }
             else
             {
-                if (transform.parent.parent.GetComponent<PhotonView>().Owner == gameController.previousPlayer())
+                if (gameController.cycle != 0 &&
+                    gameController.lastCycle != gameController.cycle &&
+                    transform.parent.parent.GetComponent<PhotonView>().Owner == gameController.previousPlayer())
                 {    
+                    gameController.lastCycle = gameController.cycle;
                     ParentTo(GetSlot(PhotonNetwork.LocalPlayer).name);
                     gameController.updatePlayerHand();
                 }
