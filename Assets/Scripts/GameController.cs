@@ -25,17 +25,58 @@ public class GameController : MonoBehaviourPun
             playerList.Add(player);
         }
         PutPlayers();
-        highlightPlayer();
     }
+
+    /* private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SetPlayerPOV();
+            highlightPlayer();
+        }
+    } */
 
     private void PutPlayers()
     {
-        for (int i = 0; i < playerList.Count; i++)
+        int povIndex;
+        int localIndex = entryIndex(PhotonNetwork.LocalPlayer);
+        Transform[] slots = new Transform[playerSlots.childCount];
+        for (int p = 0; p < playerList.Count; p++)
         {
-            playerSlots.GetChild(i).GetComponent<PhotonView>().TransferOwnership(playerList[i]);
-            playerSlots.GetChild(i).Find("Nickname").GetComponent<Text>().text = playerList[i].NickName;
+            povIndex = (entryIndex(playerList[p]) - localIndex + playerList.Count) %  playerList.Count;
+            playerSlots.GetChild(povIndex).GetComponent<PhotonView>().TransferOwnership(playerList[p]);
+            playerSlots.GetChild(povIndex).Find("Nickname").GetComponent<Text>().text = playerList[p].NickName;
+            
+            slots[p] = playerSlots.GetChild(povIndex);
+        }
+
+        for (int s = 0; s < slots.Length; s++)
+        {
+            slots[s].SetSiblingIndex(s);
         }
     }
+
+    /* private void SetPlayerPOV()
+    {
+        if (!(PhotonNetwork.LocalPlayer == PhotonNetwork.MasterClient))
+        {
+            int localIndex = playerSlot(PhotonNetwork.LocalPlayer).GetSiblingIndex();
+            Vector3[] slots = new Vector3[playerSlots.childCount];
+            for (int c = 0; c < playerSlots.childCount; c++)
+            {
+                slots[c] = playerSlots.GetChild(c).position;
+            }
+            for (int p = 0; p < playerList.Count; p++)
+            {
+                int newIndex = 0;
+                if (!playerList[p].IsLocal)
+                {
+                    newIndex = (playerSlot(playerList[p]).GetSiblingIndex() - localIndex + playerList.Count) % playerList.Count;
+                }
+                playerSlots.GetChild(p).position = slots[newIndex];
+            }
+        }
+    } */
 
     public void passTurn()
     {
@@ -101,7 +142,6 @@ public class GameController : MonoBehaviourPun
         for (int p = 0; p < playerList.Count; p++)
         {    
             Transform hand = playerSlots.GetChild(p).Find("Cards");
-            bool isMine = hand.parent.GetComponent<PhotonView>().IsMine;
             for (int c = 0; c < hand.childCount; c++)
             {
                 Transform card = hand.GetChild(c);
@@ -190,6 +230,18 @@ public class GameController : MonoBehaviourPun
                 nameText.GetComponent<Text>().color = nameColors[0];
             }
         }
+    }
+
+    public int entryIndex(Player player)
+    {
+        for (int p = 0; p < playerList.Count; p++)
+        {
+            if (playerList[p] == player)
+            {
+                return p;
+            }
+        }
+        return -1;
     }
 
     public Transform playerSlot(Player player)

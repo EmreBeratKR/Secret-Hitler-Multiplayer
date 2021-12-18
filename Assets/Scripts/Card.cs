@@ -50,7 +50,7 @@ public class Card : MonoBehaviourPun
                     transform.parent.parent.GetComponent<PhotonView>().Owner == gameController.previousPlayer())
                 {    
                     gameController.lastCycle = gameController.cycle;
-                    ParentTo(GetSlot(PhotonNetwork.LocalPlayer).name);
+                    ParentTo(gameController.entryIndex(PhotonNetwork.LocalPlayer));
                     gameController.updatePlayerHand();
                 }
             }
@@ -97,9 +97,9 @@ public class Card : MonoBehaviourPun
 
     }
 
-    public void ParentTo(string name)
+    public void ParentTo(int index)
     {
-        photonView.RPC("ParentSetRPC", RpcTarget.All, name);
+        photonView.RPC("ParentSetRPC", RpcTarget.All, index);
     }
 
     public Transform GetSlot(Player player)
@@ -115,9 +115,9 @@ public class Card : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void ParentSetRPC(string name)
+    private void ParentSetRPC(int index)
     {
-        Transform slot = gameController.playerSlots.Find(name);
+        Transform slot = gameController.playerSlots.GetChild(index);
         transform.SetParent(slot.Find("Cards"));
         transform.LeanMoveLocal(Vector3.zero, 0.25f).setEaseOutQuint();
         if (slot.TryGetComponent(out PhotonView view))

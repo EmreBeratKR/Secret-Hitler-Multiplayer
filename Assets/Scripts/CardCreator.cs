@@ -56,7 +56,7 @@ public class CardCreator : MonoBehaviour
         for (int i = 0; i < temp; i++)
         {
             int randomInt = Random.Range(0, transform.childCount);
-            transform.GetChild(randomInt).GetComponent<Card>().ParentTo(gameController.playerSlots.GetChild(i % gameController.playerList.Count).name);
+            transform.GetChild(randomInt).GetComponent<Card>().ParentTo(i % gameController.playerList.Count);
         }
         gameController.updatePlayerHand();
         Destroy(dealButton);
