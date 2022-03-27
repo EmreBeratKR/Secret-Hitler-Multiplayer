@@ -122,7 +122,11 @@ public class Card : MonoBehaviourPun
         transform.LeanMoveLocal(Vector3.zero, 0.25f).setEaseOutQuint();
         if (slot.TryGetComponent(out PhotonView view))
         {
-            photonView.TransferOwnership(view.Owner);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.TransferOwnership(view.Owner);
+            }
+            Debug.Log(view.Owner.NickName);
         }
     }
 

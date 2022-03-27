@@ -43,8 +43,11 @@ public class GameController : MonoBehaviourPun
         Transform[] slots = new Transform[playerSlots.childCount];
         for (int p = 0; p < playerList.Count; p++)
         {
-            povIndex = (entryIndex(playerList[p]) - localIndex + playerList.Count) %  playerList.Count;
-            playerSlots.GetChild(povIndex).GetComponent<PhotonView>().TransferOwnership(playerList[p]);
+            povIndex = (entryIndex(playerList[p]) - localIndex + playerList.Count) % playerList.Count;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                playerSlots.GetChild(povIndex).GetComponent<PhotonView>().TransferOwnership(playerList[p]);
+            }
             playerSlots.GetChild(povIndex).Find("Nickname").GetComponent<Text>().text = playerList[p].NickName;
             
             slots[p] = playerSlots.GetChild(povIndex);
